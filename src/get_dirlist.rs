@@ -1,9 +1,7 @@
 extern crate exif;
 extern crate chrono;
-// use gtk::prelude::*;
 use std::io::BufReader;
 use std::fs::File;
-// use std::path::{Path};
 use std::fs;
 use exif::{Reader, In, Tag};
 use crate::dump_file::dump_file;

@@ -16,7 +16,7 @@ pub fn parse_moddate(modtext: String) -> (u32, i64, i64, i64, i64, i64, i64) {
         errcode = 1;
     } else {
         for indl in 0..lendat1 {
-             let date_int: i32 = date1ar1[indl].clone().parse().unwrap_or(-9999);
+             let date_int: i32 = date1ar1[indl].parse().unwrap_or(-9999);
              if date_int == -9999 {
                  errcode = 2;
              } else {

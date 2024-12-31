@@ -9,7 +9,7 @@ use chrono::offset::LocalResult;
 
 use exif::{Reader, In, Tag};
 use std::fs;
-use std::path::{PathBuf};
+use std::path::PathBuf;
 use std::io::BufReader;
 use std::fs::File;
 use crate::dump_file::dump_file;
@@ -62,7 +62,7 @@ pub fn get_strvector(current_dir: PathBuf, dirnum: i32, filesize: i32, dateinfil
                          let lendat2 = date1ar2.len();
                          let mut baddate1 = 0;
                          for indl in 0..lendat2 {
-                              let date_int: i32 = date1ar2[indl].clone().parse().unwrap_or(-9999);
+                              let date_int: i32 = date1ar2[indl].parse().unwrap_or(-9999);
                               if date_int == -9999 {
                                   baddate1 = 1;
                                   break;
@@ -108,7 +108,7 @@ pub fn get_strvector(current_dir: PathBuf, dirnum: i32, filesize: i32, dateinfil
                                                    Duration::seconds(datesecx);
                              file_prefixdate = format!("{}_{:03}", dateto.format("%Y_%m_%d_%H_%M_%S"), datenum);
                          } else {
-                             errstring = "<span color=\"#FF000000\">********* get_strvector: BAD DATE  is not correct **********</span>".to_string();
+                             errstring = "get_strvector: BAD DATE  is not correct".to_string();
                              errcode = 1;
                              break;
                          }
@@ -154,7 +154,7 @@ pub fn get_strvector(current_dir: PathBuf, dirnum: i32, filesize: i32, dateinfil
                                  let lendatefdx = listdatex.len();
                                  let mut baddatefdx = 0;
                                  for indlfdx in 0..lendatefdx {
-                                      let datefdx_int: i32 = listdatex[indlfdx].clone().parse().unwrap_or(-9999);
+                                      let datefdx_int: i32 = listdatex[indlfdx].parse().unwrap_or(-9999);
                                       if datefdx_int == -9999 {
                                           baddatefdx = 1;
                                           break;
@@ -183,7 +183,7 @@ pub fn get_strvector(current_dir: PathBuf, dirnum: i32, filesize: i32, dateinfil
                                                        Duration::seconds(datesecx);
                                      file_prefixdate = format!("{}_500", datetox.format("%Y_%m_%d_%H_%M_%S"));
                                  } else {
-                                     errstring = "<span color=\"#FF000000\">********* get_strvector: BAD DATE  is not correct in exif **********</span>".to_string();
+                                     errstring = "get_strvector: BAD DATE  is not correct in exif".to_string();
                                      errcode = 2;
                                      break;
                                  }
@@ -196,7 +196,7 @@ pub fn get_strvector(current_dir: PathBuf, dirnum: i32, filesize: i32, dateinfil
                      let strfilesplit: Vec<&str> = filenamexx.split(".").collect();
                      let lenfilesplit = strfilesplit.len();
                      if lenfilesplit != 2 {
-                         errstring = "<span color=\"#FF000000\">********* get_strvector: one of filename does not have just 1 period **********</span>".to_string();
+                         errstring = "get_strvector: one of filename does not have just 1 period".to_string();
                          errcode = 5;
                          break;
                      }

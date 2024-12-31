@@ -1,32 +1,25 @@
-extern crate exif;
-extern crate chrono;
-// use gtk::prelude::*;
-// mod get_dirlist;
-//use std::io::BufReader;
-//use std::fs::File;
-use iced::Color;
-// use std::path::{Path};
-//use std::fs;
 use rfd::FileDialog;
-// use exif::{Reader, In, Tag};
-//use crate::dump_file::dump_file;
-//use chrono::prelude::*;
-//use std::path::{PathBuf};
+use std::path::{Path};
 use crate::get_dirlist;
-// use get_dirlist::get_dirlist;
-// function called by Organize directory 1 & 2  buttons and Convert directory button
-//  Use to get list of sorted files in the directory list in model format
-// input is the directory and output is error number, error string and model
-pub fn dirpressx () -> (Color, String, String, String) {
+pub fn dirpressx (dirval: String) -> (u32, String, String, String) {
+     let errcode: u32;
      let errstring: String;
      let mut new_dirlist: String = " ".to_string();
-     let mut new_dir: String = " ".to_string();
-     let colorx : Color;
+     let mut new_dir: String;
+     if Path::new(&dirval).exists() {
+         new_dir = dirval.to_string();
+     } else {
+         new_dir = "/".to_string();
+     }
      let folder = FileDialog::new()
-                    .pick_folder();
+//        .set_location(&new_dir)
+//        .show_open_single_dir()
+//        .unwrap();
+         .set_directory(&new_dir)
+         .pick_folder();
      if folder == None {
          errstring = "error getting directory -- possible cancel key hit".to_string();
-         colorx = Color::from([1.0, 0.0, 0.0]);
+         errcode = 1;
      } else {
          new_dir = folder.as_ref().expect("REASON").display().to_string();
          let current_dir = folder;
@@ -34,12 +27,12 @@ pub fn dirpressx () -> (Color, String, String, String) {
          if errcd == 0 {
              new_dirlist = newliststr;
              errstring = "got directory".to_string();
-             colorx = Color::from([0.0, 0.0, 0.0]);
+             errcode = 0;
          } else {
              errstring = errstr.to_string();
-             colorx = Color::from([1.0, 0.0, 0.0]);
+             errcode = 2;
          }
      } 
-    (colorx, errstring, new_dir, new_dirlist)
+    (errcode, errstring, new_dir, new_dirlist)
 }
 

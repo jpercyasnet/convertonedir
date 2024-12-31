@@ -1,9 +1,5 @@
 use iced::widget::{button, column, row, text_input, text, scrollable};
-use iced::{Alignment, Element, Task, Length, Color, Theme, Size};
-
-use iced::event::{self, Event};
-use iced::Subscription;
-use iced::window;
+use iced::{Alignment, Element, Task, Length, Color, Theme};
 
 use std::process::Command as stdCommand;
 use std::path::Path;
@@ -31,17 +27,16 @@ pub fn main() -> iced::Result {
 
      let mut widthxx: f32 = 1350.0;
      let mut heightxx: f32 = 750.0;
-     let (errcode, _errstring, widtho, heighto) = get_winsize();
+     let (errcode, errstring, widtho, heighto) = get_winsize();
      if errcode == 0 {
          widthxx = widtho as f32 - 20.0;
          heightxx = heighto as f32 - 75.0;
-//         println!("{}", errstring);
-//     } else {
-//         println!("**ERROR {} get_winsize: {}", errcode, errstring);
+         println!("{}", errstring);
+     } else {
+         println!("**ERROR {} get_winsize: {}", errcode, errstring);
      }
      iced::application(Convert1dir::title, Convert1dir::update, Convert1dir::view)
         .window_size((widthxx, heightxx))
-        .subscription(Convert1dir::subscription)
         .theme(Convert1dir::theme)
         .run_with(Convert1dir::new)
 
@@ -69,23 +64,21 @@ enum Message {
     MergePressed,
     CopyPressed,
     CopyxFound(Result<Copyx, Error>),
-    Size(Size),
 }
 
 impl Convert1dir {
     fn new() -> (Self, Task<Message>) {
     
-        let mut heightxx: f32 = 225.0;
+        let mut heightxx: f32 = 175.0;
         let (errcode, errstring, _widtho, heighto) = get_winsize();
-        let for_message: String;
         if errcode == 0 {
-            heightxx = 225.0 + ((heighto as f32 - 768.0) / 2.0);
-            for_message = format!("{}", errstring);
+            heightxx = 175.0 + ((heighto as f32 - 768.0) / 2.0);
+            println!("{}", errstring);
         } else {
-            for_message = format!("**ERROR {} get_winsize: {}", errcode, errstring);
+         println!("**ERROR {} get_winsize: {}", errcode, errstring);
         }
-        ( Self { dir_value: "no directory".to_string(), msg_value: for_message.to_string(), hhmmss_value: "-00:00:00:00:00:00".to_string(), 
-               size_value: "10".to_string(), mess_color: Color::from([0.5, 0.5, 1.0]), outdir_value: "no directory".to_string(), 
+        ( Self { dir_value: "no directory".to_string(), msg_value: "no message".to_string(), hhmmss_value: "-00:00:00:00:00:00".to_string(), 
+               size_value: "10".to_string(), mess_color: Color::from([0.0, 0.0, 1.0]), outdir_value: "no directory".to_string(), 
                scrol_value: " No directory selected \n \
                             ".to_string(),
                mergescrol_value: " No directory selected \n \
@@ -149,20 +142,16 @@ impl Convert1dir {
                    Task::none()
                }
             }
-            Message::CopyxFound(Ok(copyx)) => {
-               self.msg_value = copyx.errval.clone();
-               self.mess_color = copyx.errcolor.clone();
-               Task::none()
-            }
-            Message::CopyxFound(Err(_error)) => {
-               self.msg_value = "error in copyx copyit routine".to_string();
-               self.mess_color = Color::from([1.0, 0.0, 0.0]);
-               Task::none()
-            }
-            Message::Size(size) => {
-               self.scrolheight = 225.0 + ((size.height as f32 - 768.0) / 2.0);
-               Task::none()
-            }
+              Message::CopyxFound(Ok(copyx)) => {
+                self.msg_value = copyx.errval.clone();
+                self.mess_color = copyx.errcolor.clone();
+                Task::none()
+             }
+             Message::CopyxFound(Err(_error)) => {
+                self.msg_value = "error in copyx copyit routine".to_string();
+                self.mess_color = Color::from([1.0, 0.0, 0.0]);
+                Task::none()
+             }
 
         }
     }
@@ -206,15 +195,6 @@ impl Convert1dir {
     
     fn theme(&self) -> Theme {
         Theme::Dracula
-    }
-
-    fn subscription(&self) -> Subscription<Message> {
-        event::listen_with(|event, _status, _window| match event {
-            Event::Window(window::Event::Resized(size)) => {
-                Some(Message::Size(size))
-            }
-            _ => None,
-        })
     }
 }
 #[derive(Debug, Clone)]
